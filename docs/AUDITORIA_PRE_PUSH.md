@@ -24,9 +24,9 @@ A matriz usa as etapas e os pesos do enunciado oficial. O sucesso padrão e a au
 | Complementar. Falha no envio preserva o checkout aprovado | Qualidade dos testes (10%) | ATENDIDO | [Falha de envio](../__tests__/CheckoutService.test.js#L101) | O envio rejeita a Promise. O checkout devolve a instância salva e registra a mensagem com `console.error`. | O spy é restaurado em `finally`. |
 | Complementar. Carrinho vazio e independência dos dados | Padrões de criação (30%) e qualidade dos testes (10%) | ATENDIDO | [Builders.test.js](../__tests__/Builders.test.js#L7) | Carrinho vazio tem lista vazia e total `0`. Alterar usuário e itens de um carrinho padrão preserva os defaults de outro builder. | Três testes. |
 | Etapa 6. Suíte completa, isolada, com AAA | Qualidade dos testes (10%) | ATENDIDO | [CheckoutService.test.js](../__tests__/CheckoutService.test.js), [Builders.test.js](../__tests__/Builders.test.js) | Duas suítes, sete testes aprovados e zero reprovados em teste e cobertura. O checkout recebe três dublês locais em cada cenário. | O cartão é um valor sintético. O checkout real e as entidades reais são exercitados. |
-| Etapa 6. Commits e push da solução para o fork | Versionamento e entrega | PARCIAL | Histórico local e [fork](https://github.com/LuidiC/test-pattern) | Commits locais registrados na branch de trabalho. `git ls-remote --heads origin` retornou somente a `main` original. | A publicação depende da revisão externa e da autorização explícita do aluno. |
+| Etapa 6. Commits e push da solução para o fork | Versionamento e entrega | PARCIAL | Histórico local e [fork](https://github.com/LuidiC/test-pattern) | Commits locais registrados na branch de trabalho. Na última consulta ao fork, `git ls-remote --heads origin` retornou somente a `main` original. | Revisão externa aprovada. Falta a autorização explícita de publicação. |
 | Entrega 1. Link do fork com os arquivos da solução | Entrega | PARCIAL | [Fork](https://github.com/LuidiC/test-pattern), [`__tests__/`](../__tests__) | O link identifica o fork correto. Os testes e builders estão versionados localmente. | A versão pública ainda contém a base original. |
-| Entrega 2. PDF de 2 a 4 páginas com capa | Relatório escrito (20%) | PARCIAL | [PDF](../entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf), p. 1 | Três páginas. A capa traz instituição, disciplina, título, nome e data. | Matrícula obrigatória a informar. |
+| Entrega 2. PDF de 2 a 4 páginas com capa | Relatório escrito (20%) | ATENDIDO | [PDF](../entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf), p. 1 | Três páginas. A capa traz instituição, disciplina, título, nome, matrícula e data. | Matrícula conferida na fonte e no PDF. |
 | Entrega 2. Builder versus Mother, Antes/Depois e legibilidade | Relatório escrito (20%) | ATENDIDO | [PDF](../entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf), p. 2, e [fonte](Relatorio_Test_Patterns_Luidi_Cadete_Silva.md) | Os dois trechos montam um carrinho Premium de R$ 200. O texto explica a combinação de variações pelo Builder, a concentração dos dados comuns e a prevenção de Obscure Setup. | O Depois reproduz a preparação do teste Premium. |
 | Entrega 2. Stubs, Mock e estado/comportamento no sucesso Premium | Relatório escrito (20%) | ATENDIDO | [PDF](../entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf), p. 3 | Explica respostas predefinidas do gateway e do repositório, a verificação do e-mail e a diferença entre inspecionar o retorno e inspecionar uma chamada. Inclui código real. | O teste de recusa exemplifica verificação de estado com `toBeNull()`. |
 | Entrega 2. Conclusão sobre Test Smells e sustentabilidade | Relatório escrito (20%) | ATENDIDO | [PDF](../entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf), p. 3, conclusão | Discute repetição no Arrange, isolamento de serviços e manutenção das expectativas de negócio. | Relaciona os padrões aos casos concretos. |
@@ -36,6 +36,10 @@ A matriz usa as etapas e os pesos do enunciado oficial. O sucesso padrão e a au
 - `User(id, nome, email, tipo = 'PADRAO')` identifica Premium por `tipo === 'PREMIUM'`. `Carrinho(user, itens = [])` soma `item.preco`. `Item(nome, preco)` traz apenas nome e preço. `Pedido(id, carrinho, totalFinal, status)` guarda os dados do pedido.
 - `CheckoutService(gateway, repository, emailSvc)` injeta as dependências. `processarPedido(carrinho, cartaoCredito)` chama `cobrar(totalFinal, cartaoCredito)` com o total integral ou 90% dele. Em caso de recusa, retorna `null`.
 - Na aprovação, o serviço chama `salvar(pedido)` com um `Pedido` de status `PROCESSADO` e usa o ID retornado para `enviarEmail(para, assunto, corpo)`. Uma rejeição no envio é registrada e o serviço devolve o pedido salvo. O gateway, o repositório e o e-mail concretos do projeto-base lançam erro se forem chamados diretamente.
+
+## Revisão externa
+
+Em 16 de novembro de 2026, o aluno comunicou que a revisão externa com o ChatGPT aprovou a implementação dos padrões, os testes, a documentação técnica e o conteúdo do relatório. A única correção obrigatória registrada foi incluir a matrícula na capa. A fonte editável e o PDF foram atualizados com a matrícula informada pelo aluno.
 
 ## Execução e evidências
 
@@ -47,6 +51,8 @@ Ambiente Windows com Git 2.48.1.windows.1, Node.js 24.14.1, npm 11.11.0 e Jest 2
 | `npm.cmd test -- --runInBand` com a configuração original | Código 1. Quatro suítes detectadas, incluindo os dois builders, falharam ao carregar. Zero testes executados. O Jest reportou `SyntaxError: Cannot use import statement outside a module`. |
 | `npm.cmd test -- --runInBand` após o ajuste | Código 0. Duas suítes e sete testes aprovados, zero reprovados. |
 | `npm.cmd run coverage -- --runInBand` | Código 0. Duas suítes e sete testes aprovados, zero reprovados. |
+| `npm.cmd test -- --runInBand` após a revisão externa | Código 0. Duas suítes e sete testes aprovados, zero reprovados. |
+| `npm.cmd run coverage -- --runInBand --coverageReporters=text` após a revisão externa | Código 0. Duas suítes e sete testes aprovados, zero reprovados. O indicador de cobertura de `CheckoutService.js` foi de 100% nas quatro métricas. |
 
 Trecho da execução após o ajuste:
 
@@ -65,17 +71,17 @@ Na cobertura, os arquivos instrumentados somaram **100% de instruções, 66,66% 
 
 ## Conferência do PDF
 
-O arquivo [`entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf`](../entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf) foi reaberto para extração de texto e renderizado em três imagens para inspeção visual. Conferi a capa, a legibilidade dos blocos de código, a paginação e as margens. As três páginas estão legíveis, sem cortes ou sobreposições. A [fonte editável](Relatorio_Test_Patterns_Luidi_Cadete_Silva.md) contém o mesmo conteúdo, incluindo a marcação de que a matrícula ainda precisa ser informada.
+O arquivo [`entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf`](../entrega/Relatorio_Test_Patterns_Luidi_Cadete_Silva.pdf) foi regenerado com a capa atualizada a partir da [fonte editável](Relatorio_Test_Patterns_Luidi_Cadete_Silva.md). A leitura do texto confirmou a matrícula na capa. A inspeção visual das três páginas confirmou a legibilidade, a paginação e as margens. A comparação com a versão revisada mostrou que a única diferença visual é a linha da matrícula na capa.
 
-SHA-256 do PDF conferido com `Get-FileHash`: `8409503c6af9b76e8751008d424c58e3a81e2845811817ed826cdc6fb03785c0`.
+SHA-256 do PDF atualizado: `8bee77bdc9bd90c420cad31a394f0935bbfd454c5bb4663e9fc763474d57592b`.
 
 ## Conferência Git
 
 - Cópia de trabalho em `C:\Users\Stron\Documents\Atividade de Teste - Test Pattern`, branch `trabalho/test-patterns`, criada sobre `main` no commit `d493ee6bb05e9709a4166fa82bdcc191082ca979`.
 - `origin` para `https://github.com/LuidiC/test-pattern.git` e `upstream` para `https://github.com/CleitonSilvaT/test-pattern.git`, ambos verificados com `git remote -v`.
 - O conector GitHub confirmou a conta `LuidiC`. A CLI `gh` não estava instalada. A credencial do Git local foi usada em memória para confirmar a mesma conta na API e criar o fork após a consulta de existência. Clone e instalação usaram acesso de rede autorizado pelo ambiente.
-- `07609e7` registra testes, builders, `package.json` e `package-lock.json`. `61fff6c` registra o README, a fonte editável e o PDF. O commit `docs: registra a auditoria pré-publicação` acrescenta este arquivo e pode ser identificado com `git log -1 -- docs/AUDITORIA_PRE_PUSH.md`.
-- Após os commits de implementação e relatório, `git status --short -b` exibiu somente `## trabalho/test-patterns` e `git rev-list --left-right --count origin/main...HEAD` retornou `0 2`. A verificação final após o commit da auditoria acompanha o handoff.
+- `07609e7` registra os testes, builders e configurações. `61fff6c` registra o README, a fonte editável e o PDF inicial. `69e77f2` acrescenta a primeira versão da auditoria. O commit mais recente da auditoria pode ser identificado com `git log -1 -- docs/AUDITORIA_PRE_PUSH.md`.
+- Antes da atualização da matrícula, `git status --short -b` exibiu somente `## trabalho/test-patterns` e `HEAD` apontava para `69e77f2`. A verificação da árvore de trabalho após o commit de correção acompanha o handoff.
 - `git diff --exit-code upstream/main HEAD -- src/` encerrou com código 0. `git diff --check upstream/main HEAD` não acusou problemas. `.gitignore` cobre `node_modules/` e `coverage/`. A revisão dos arquivos e a busca por padrões de credenciais nos textos versionados não encontraram tokens ou chaves privadas.
 - `git ls-remote --heads origin` encontrou apenas `refs/heads/main` em `d493ee6bb05e9709a4166fa82bdcc191082ca979`. Os commits da solução permanecem locais. Nenhum push da solução, PR ou merge foi executado.
 
@@ -86,7 +92,7 @@ SHA-256 do PDF conferido com `Get-FileHash`: `8409503c6af9b76e8751008d424c58e3a8
 | Padrões de criação, 30% | ATENDIDO | `UserMother` instancia as categorias reais. `CarrinhoBuilder` fornece defaults, API fluente e uma instância de `Carrinho`. A suíte específica comprova o isolamento e a construção vazia. |
 | Test Doubles, 40% | ATENDIDO | Stubs dirigem sucesso e recusa e devolvem pedidos salvos. O Mock de e-mail verifica quantidade e argumentos. A cobrança Premium de R$ 180 é verificada diretamente. |
 | Qualidade dos testes, 10% | ATENDIDO | Os cenários de checkout seguem AAA e usam dublês locais. Dois comandos independentes do Jest passaram com sete testes. |
-| Relatório escrito, 20% | PARCIAL | Três páginas validadas, com as análises, exemplos e conclusão exigidos. A matrícula ausente deixa a capa incompleta para entrega acadêmica. |
+| Relatório escrito, 20% | ATENDIDO | Três páginas verificadas, com as análises, exemplos e conclusão exigidos. A capa contém a matrícula informada pelo aluno. |
 
 ## Liberação
 
@@ -94,7 +100,8 @@ SHA-256 do PDF conferido com `Get-FileHash`: `8409503c6af9b76e8751008d424c58e3a8
 - [x] Suítes, builders, documentação e PDF versionados localmente.
 - [x] Testes, cobertura e inspeção visual registrados.
 - [x] Referências públicas do fork conferidas antes da revisão.
-- [ ] **Bloqueio acadêmico:** obter a matrícula verdadeira, atualizar a fonte e o PDF e conferir novamente a capa.
-- [ ] **Bloqueio de publicação:** obter a aprovação da revisão externa e a autorização explícita de publicação. Só então disponibilizar a solução no fork.
+- [x] Aprovação da revisão externa comunicada pelo aluno.
+- [x] Matrícula incluída na fonte e no PDF. Capa e demais páginas conferidas.
+- [ ] **Bloqueio de publicação:** obter a autorização final explícita do aluno para disponibilizar a solução no fork.
 
-**BLOQUEADO POR PENDÊNCIAS** para entrega acadêmica e publicação. O material local pode seguir para revisão externa neste checkpoint.
+**Revisão externa aprovada e correção acadêmica concluída.** Publicação pendente de autorização final.
